@@ -7,31 +7,142 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+  //create base case - if n is equal to 0 return the result
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  // use recursive case
+  // mutliple n to facorial(n - 1)
+  return n * factorial(n-1);
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+  // create var total set to zero
+  // create base case - where if length of array is equal to 1 then itll return array.
+  // creat recursive case
+    // return the initial array but grab the last element in the array and
+    // add to the sum array function with the last element removed.
+    // should recursively call the function with the last element gone.
+  var newArray = array.slice();
+
+  if (newArray.length === 0) {
+    return 0;
+  }
+  return newArray.pop() + sum(newArray);
+
+  // var total = 0;
+  // array.forEach(function(num) {
+  //   total += num;
+  // });
+  // return total;
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+var subArray = array.slice();
+var result = 0;
+
+var innerFunction = function(array) {
+
+  subArray.forEach(function(num) {
+    // base case
+    if (!Array.isArray(num)) {
+      result += num;
+    } else {
+      //recursive case
+      result += arraySum(num);
+    }
+  });
+}
+innerFunction(subArray);
+
+return result;
+
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  // find a way to reduce n all the way to 0 or 1 to find out if it is even.
+  // takes negative away from negative numbers
+  if (n < 0) {
+    n = -n;
+  }
+  // base case
+  if (n - 2 === 0) {
+    return true;
+  }
+  if (n - 2 === 1 || n === 1) {
+    return false;
+  }
+  // recursive case
+  return isEven(n - 2);
+
+
 };
+  // return (n % 2 === 0);
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  // account for negatives
+  // if (n < 0) {
+  //   n = -n;
+  // }
+
+  // base case
+  if (n === 0) {
+    return 0;
+  }
+  // recursive case - Negative
+  if (n < 0) {
+    return n+1 + sumBelow(n + 1);
+  }
+  // recursive case - Positive
+  return n-1 + sumBelow(n - 1);
+
 };
+
+// ===============================
+
+// ===============================
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  // typical for loop and subtract 1 from y until it reaches x,
+  // pushing each num into a new result array.
+  var arrayOfNums = [];
+  // base case
+  if (x === y) {
+    return [];
+  }
+  //recursive case (Negative Nums)
+  if (x > y) {
+    if (x === y + 1) {
+      return [];
+    }
+    arrayOfNums.push(x - 1);
+    return arrayOfNums.concat(range(x - 1, y));
+
+  }
+  // recursive case (Positive Nums)
+  if (x < y) {
+    if (x === y - 1) {
+      return [];
+    }
+    arrayOfNums.push(x + 1);
+    return arrayOfNums.concat(range(x + 1, y));
+  }
+
+  return arrayOfNums.sort();
+
 };
 
 // 7. Compute the exponent of a number.
@@ -40,21 +151,74 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  // base case
+  if(exp === 0) {
+    return 1;
+  }
+  // recursive case (negative integer)
+  if (exp < 0) {
+    // make exp positive
+    exp = - exp;
+    return 1/ (base * (exponent(base, exp - 1)))
+  }
+  // recursive case (positive integer)
+    return base * (exponent(base, exp - 1))
 };
+
+// ===============================
+
+// ===============================
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  // base case
+  if (n === 1) {
+    return true;
+  }
+  if (Math.floor(n) !== n || n === 0) {
+    return false;
+  }
+  if (n > 0) {
+    // console.log(n);
+    return powerOfTwo(n/2);
+  }
+
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  var len = string.length;
+	if (len) {
+		return string[len - 1] + reverse(string.slice(0, len - 1))
+	}
+	return '';
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  // somehow check the first word to the last word one by one if it matches good, doesnt false.
+  var len = string.length;
+
+    if (len < 2) {
+    return true;
+  }
+  while (string[0] === ' ') {
+    return palindrome(string.slice(1));
+  }
+
+  while (string[len - 1] === ' ') {
+    return palindrome(string.slice(0, len - 1));
+  }
+
+  if(string[0].toLowerCase() === string[len - 1].toLowerCase()) {
+    return palindrome(string.slice(1, len - 1));
+  }
+  return false;
+
+
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -131,16 +295,66 @@ var rMap = function(array, callback) {
 var countKeysInObj = function(obj, key) {
 };
 
+// ===============================
+
+// ===============================
+
 // 23. Write a function that counts the number of times a value occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+  // create a count var set to 0.
+  //iterate over the object
+    // for key in obj
+      // call countValuesInObj on the key, value
+      // if value matches obj.key. add 1 to count.
+  var count = 0;
+  if (typeof obj === 'object') {
+    for (var testKey in obj) {
+      console.log(testKey);
+      if (obj[testKey] === value) {
+        count++
+      } else {
+        count += countValuesInObj(obj[testKey], value);
+      }
+    }
+  }
+  return count;
 };
+
+// ===============================
+
+// ===============================
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  // iterate over the obj and find out if oldKey matches currentkey, if so change it.
+  if (typeof obj === 'object') {
+    for (var key in obj) {
+      if (obj[key] === oldKey) {
+        obj[key] = newKey;
+        console.log(obj);
+      } else {
+        replaceKeysInObj(key, oldKey, newKey);
+      }
+    }
+  }
+  return obj;
+
+
+  // for (var key in obj) {
+  //   console.log(obj, key);
+  //   if (typeof key === 'object') {
+  //     replaceKeysInObj(key, oldKey, newKey);
+  //   }
+  //   if(oldKey === key) {
+  //     oldKey = newKey;
+  //   }
+  // }
+  // return obj;
+
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
