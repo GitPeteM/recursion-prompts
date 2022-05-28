@@ -217,8 +217,6 @@ var palindrome = function(string) {
     return palindrome(string.slice(1, len - 1));
   }
   return false;
-
-
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -227,11 +225,42 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+  if (x === 0 && y === 0) {
+    return NaN;
+  }
+  console.log(x);
+  if (x < 0 ) {
+    return - modulo (-x, y);
+  }
+  y < 0 ? y = -y : y;
+
+  if (x < y) {
+    console.log(x);
+    return x;
+  } else {
+    return modulo(x - y, y);
+  }
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
+// create recursion so that x adds to itself as long as y doesnt equal 0 and then return x.
+// if y is negative then you need to add to y not subtract.
 var multiply = function(x, y) {
+  var sum = 0;
+
+  if (y < 0) {
+    if (y !== 0) {
+      sum += x;
+      return -sum + multiply(x, y + 1);
+    }
+  } else if (y > 0) {
+    if ( y !== 0) {
+      sum += x;
+      return sum + multiply(x, y - 1);
+    }
+  }
+  return sum;
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
